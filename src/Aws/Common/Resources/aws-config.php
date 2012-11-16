@@ -31,6 +31,11 @@ return array(
             'class'   => 'Aws\DynamoDb\DynamoDbClient'
         ),
 
+        'elasticbeanstalk' => array(
+            'extends' => 'default_settings',
+            'class'   => 'Aws\ElasticBeanstalk\ElasticBeanstalkClient'
+        ),
+
         'glacier' => array(
             'extends' => 'default_settings',
             'class'   => 'Aws\Glacier\GlacierClient'
