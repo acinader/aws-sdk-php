@@ -30,6 +30,7 @@ use Aws\Common\Region\XmlEndpointProvider;
 use Guzzle\Common\Collection;
 use Guzzle\Cache\DoctrineCacheAdapter;
 use Guzzle\Plugin\Backoff\BackoffPlugin;
+use Guzzle\Http\Client as HttpClient;
 use Guzzle\Service\Client;
 
 /**
@@ -253,6 +254,12 @@ class ClientBuilder
             array_merge(self::$commonConfigDefaults, $this->configDefaults),
             (self::$commonConfigRequirements + $this->configRequirements)
         );
+
+        // If no cacert is set and the user is running from the phar and the phar was able to create a cacert on disk,
+        // then use the cacert defined in AWS_CACERT (phar defaults to sys_get_temp_dir . '/' . 'cacert.pem)
+        if (defined('AWS_CACERT') && !$config->hasKey(HttpClient::SSL_CERT_AUTHORITY)) {
+            $config->set(HttpClient::SSL_CERT_AUTHORITY, AWS_CACERT);
+        }
 
         // If no endpoint provider was explicitly set, the instantiate a default endpoint provider
         if (!$config->get(Options::ENDPOINT_PROVIDER)) {

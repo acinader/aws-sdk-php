@@ -30,6 +30,19 @@ $classLoader->registerNamespaces(array(
 ));
 $classLoader->register();
 
+// Many AWS services require a more up to date cacert.pem file. Because curl cannot read directly from a cacert file,
+// here we are attempting to copy the cacert file from the phar into a tmp writable directory.
+$cacert = sys_get_temp_dir() . '/cacert.pem';
+if (!file_exists($cacert)) {
+    if (!@file_put_contents($cacert, file_get_contents('phar://aws.phar/vendor/guzzle/guzzle/src/Guzzle/Http/Resources/cacert.pem'))) {
+        trigger_error("Could not write cacert file to {$cacert}", E_USER_NOTICE);
+    } else {
+        define('AWS_CACERT', $cacert);
+    }
+} else {
+    define('AWS_CACERT', $cacert);
+}
+
 return $classLoader;
 
 __HALT_COMPILER();

@@ -38,10 +38,11 @@
         <phingcall target="test-init" />
         <pharpackage destfile="build/aws.phar" stub="build/phar-stub.php" basedir=".">
             <fileset dir=".">
-                <!-- Add AWS classes -->
+                <!-- Add AWS classes and data -->
                 <include name="src/**/*.php" />
                 <include name="src/**/*.json" />
                 <include name="src/**/*.xml" />
+                <include name="src/**/*.pem" />
                 <!-- Include the Symfony2 class loader component -->
                 <include name="vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php" />
                 <!-- Install Guzzle and its dependencies -->
